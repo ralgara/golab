@@ -40,7 +40,7 @@ func Home(w http.ResponseWriter, r *http.Request) {
 				<input type="submit"/>
 			</form>
 		</body>
-	</body>
+	</html>
 	`)
 }
 
