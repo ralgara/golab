@@ -74,4 +74,5 @@ func Receive(w http.ResponseWriter, r *http.Request) {
 	default:
 		fmt.Fprintf(w, "Nothin'")
 	}
+	w.Header().Set("Cache-Control", "max-age=0")
 }
