@@ -14,12 +14,13 @@ type Item struct {
 
 // Worker goroutine: get an ID, does some pretend work (random) and writes result to channel
 func worker(id int) int {
+	fmt.Printf("Request [%v]\n", id)
 	delay := rand.Float64() * 3
 	time.Sleep(time.Duration(delay) * time.Second)
 	magic := rand.Intn(1000)
 	item := Item{id: id, magic: magic}
 	channel <- item
-	fmt.Printf("Sent [%v] after %0.2f seconds\n", item, delay)
+	fmt.Printf("Response [%v] after %0.2f seconds\n", item, delay)
 	return magic
 }
 
@@ -33,7 +34,7 @@ func main() {
 	}
 	for i := 0; i < N; i++ {
 		m := <-channel
-		fmt.Printf("Received %v\n", m)
+		fmt.Printf("Received [%v]\n", m)
 	}
 	fmt.Println("Done")
 }
