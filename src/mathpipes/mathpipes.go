@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
-	"sync"
 )
 
 // Work item struct: two operands and a function object
@@ -21,12 +20,9 @@ type Function struct {
 }
 
 // Pipeline channel
-var c chan Op = make(chan Op)
+var pipeline chan Op = make(chan Op)
 
 var results chan bool = make(chan bool)
-
-// WaitGroup to ensure main
-var wg sync.WaitGroup
 
 func main() {
 	fmt.Println("Start")
@@ -45,7 +41,7 @@ func main() {
 		// Inline goroutine to write Op to channel without blocking
 		// Op function and operands are random
 		go func(op Op) {
-			c <- op
+			pipeline <- op
 		}(Op{
 			x:  rand.Float64() * 10,
 			y:  rand.Float64() * 10,
@@ -55,7 +51,7 @@ func main() {
 	}
 	// Execute all Ops from the channel
 	for i := 0; i < n; i++ {
-		op := <-c
+		op := <-pipeline
 		res := op.fn.impl(op.x, op.y)
 		fmt.Printf("%s(%0.2f,%0.2f)= %0.2f\n", op.fn.name, op.x, op.y, res)
 	}
