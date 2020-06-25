@@ -2,5 +2,6 @@
 
 DIR=$(python -c 'import os, sys; print os.path.realpath(os.getcwd())')
 
-docker run -it -v $DIR:/workspace golang:alpine3.12
+docker build . -t clarabridge/golang-dev
+docker run -it -v $DIR:/workspace -w /workspace clarabridge/golang-dev
 
